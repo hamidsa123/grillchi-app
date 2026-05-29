@@ -1,0 +1,77 @@
+{
+  "brand": {
+    "name": "غريلتشي",
+    "tagline": "مشويات على الفحم، بإتقان"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "menu": "القائمة",
+    "specials": "العروض",
+    "branch": "الفرع",
+    "language": "اللغة"
+  },
+  "home": {
+    "ourMenu": "تصفّح",
+    "ourMenu2": "القائمة",
+    "heroSub": "كلاسيكيات الفحم بإطلالة جديدة. امسح، تصفّح واطلب — من طاولتك مباشرة.",
+    "browseMenu": "تصفّح القائمة",
+    "callWaiter": "نادِ النادل",
+    "featured": "مميزة",
+    "chefPicks": "اختيار الشيف",
+    "trending": "الأكثر رواجاً",
+    "trendingSub": "الأكثر طلباً اليوم",
+    "seeAll": "عرض الكل"
+  },
+  "menu": {
+    "allDishes": "كل الأصناف",
+    "inThisCat": "صنف في هذه الفئة",
+    "items": "صنف"
+  },
+  "dish": {
+    "popular": "مميز",
+    "new": "جديد",
+    "spicy": "حار",
+    "veg": "نباتي",
+    "kcal": "سعرة",
+    "mins": "دقيقة",
+    "prep": "وقت التحضير",
+    "energy": "الطاقة",
+    "spiceLvl": "الحرارة",
+    "ingredients": "المكوّنات",
+    "addToOrder": "أضف للطلب",
+    "added": "أُضيف إلى طلبك",
+    "curr": "تومان",
+    "mild": "خفيف"
+  },
+  "branch": {
+    "chooseBranch": "اختر الفرع",
+    "chooseBranchSub": "قد تختلف الأسعار حسب الموقع",
+    "open": "مفتوح الآن",
+    "closed": "مغلق"
+  },
+  "lang": {
+    "chooseLang": "اختر اللغة",
+    "chooseLangSub": "تتكيّف القائمة مع لغتك"
+  },
+  "admin": {
+    "dashboard": "لوحة التحكم",
+    "dishes": "الأطباق",
+    "categories": "الفئات",
+    "branches": "الفروع",
+    "promos": "العروض",
+    "settings": "الإعدادات",
+    "logout": "تسجيل الخروج",
+    "login": "تسجيل الدخول",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "add": "إضافة",
+    "upload": "رفع صورة",
+    "featured": "مميز",
+    "trending": "رائج",
+    "available": "متاح"
+  }
+}

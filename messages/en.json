@@ -1,0 +1,77 @@
+{
+  "brand": {
+    "name": "GRILLCHI",
+    "tagline": "Fire-grilled, beautifully served"
+  },
+  "nav": {
+    "home": "Home",
+    "menu": "Menu",
+    "specials": "Offers",
+    "branch": "Branch",
+    "language": "Language"
+  },
+  "home": {
+    "ourMenu": "Explore the",
+    "ourMenu2": "Menu",
+    "heroSub": "Charcoal-fired classics, reimagined. Scan, browse and order — right from your table.",
+    "browseMenu": "Browse full menu",
+    "callWaiter": "Call waiter",
+    "featured": "Featured",
+    "chefPicks": "Chef's selection",
+    "trending": "Trending now",
+    "trendingSub": "What everyone is ordering today",
+    "seeAll": "See all"
+  },
+  "menu": {
+    "allDishes": "All dishes",
+    "inThisCat": "dishes in this category",
+    "items": "items"
+  },
+  "dish": {
+    "popular": "Popular",
+    "new": "New",
+    "spicy": "Spicy",
+    "veg": "Veg",
+    "kcal": "kcal",
+    "mins": "min",
+    "prep": "Prep time",
+    "energy": "Energy",
+    "spiceLvl": "Spice",
+    "ingredients": "Ingredients",
+    "addToOrder": "Add to order",
+    "added": "Added to your order",
+    "curr": "Toman",
+    "mild": "Mild"
+  },
+  "branch": {
+    "chooseBranch": "Choose your branch",
+    "chooseBranchSub": "Prices & availability may vary by location",
+    "open": "Open now",
+    "closed": "Closed"
+  },
+  "lang": {
+    "chooseLang": "Choose language",
+    "chooseLangSub": "The menu adapts to your language"
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "dishes": "Dishes",
+    "categories": "Categories",
+    "branches": "Branches",
+    "promos": "Promotions",
+    "settings": "Settings",
+    "logout": "Sign out",
+    "login": "Sign in",
+    "email": "Email",
+    "password": "Password",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add new",
+    "upload": "Upload image",
+    "featured": "Featured",
+    "trending": "Trending",
+    "available": "Available"
+  }
+}

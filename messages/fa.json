@@ -1,0 +1,77 @@
+{
+  "brand": {
+    "name": "گریلچی",
+    "tagline": "غذای اصیل، روی آتش"
+  },
+  "nav": {
+    "home": "خانه",
+    "menu": "منو",
+    "specials": "پیشنهادها",
+    "branch": "شعبه",
+    "language": "زبان"
+  },
+  "home": {
+    "ourMenu": "منوی",
+    "ourMenu2": "گریلچی",
+    "heroSub": "کلاسیک‌های روی آتش، با نگاهی نو. اسکن کنید، انتخاب کنید و سفارش دهید — از سر میز.",
+    "browseMenu": "مشاهده منوی کامل",
+    "callWaiter": "صدا زدن گارسون",
+    "featured": "پیشنهاد ویژه",
+    "chefPicks": "انتخاب سرآشپز",
+    "trending": "پرطرفدارها",
+    "trendingSub": "پرسفارش‌ترین‌های امروز",
+    "seeAll": "مشاهده همه"
+  },
+  "menu": {
+    "allDishes": "همه غذاها",
+    "inThisCat": "غذا در این دسته",
+    "items": "مورد"
+  },
+  "dish": {
+    "popular": "محبوب",
+    "new": "جدید",
+    "spicy": "تند",
+    "veg": "گیاهی",
+    "kcal": "کالری",
+    "mins": "دقیقه",
+    "prep": "زمان آماده‌سازی",
+    "energy": "انرژی",
+    "spiceLvl": "تندی",
+    "ingredients": "مواد تشکیل‌دهنده",
+    "addToOrder": "افزودن به سفارش",
+    "added": "به سفارش اضافه شد",
+    "curr": "تومان",
+    "mild": "ملایم"
+  },
+  "branch": {
+    "chooseBranch": "انتخاب شعبه",
+    "chooseBranchSub": "قیمت و موجودی بسته به شعبه متفاوت است",
+    "open": "باز است",
+    "closed": "بسته"
+  },
+  "lang": {
+    "chooseLang": "انتخاب زبان",
+    "chooseLangSub": "منو با زبان شما هماهنگ می‌شود"
+  },
+  "admin": {
+    "dashboard": "داشبورد",
+    "dishes": "غذاها",
+    "categories": "دسته‌ها",
+    "branches": "شعب",
+    "promos": "تبلیغات",
+    "settings": "تنظیمات",
+    "logout": "خروج",
+    "login": "ورود",
+    "email": "ایمیل",
+    "password": "رمز عبور",
+    "save": "ذخیره",
+    "cancel": "لغو",
+    "delete": "حذف",
+    "edit": "ویرایش",
+    "add": "افزودن",
+    "upload": "آپلود تصویر",
+    "featured": "ویژه",
+    "trending": "پرطرفدار",
+    "available": "موجود"
+  }
+}
