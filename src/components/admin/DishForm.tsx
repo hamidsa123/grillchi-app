@@ -88,13 +88,15 @@ export default function DishForm({ dish, categories }: Props) {
     if (!file) return
     setImageUploading(true); setImageError('')
     try {
-      const supabase = createClient()
       const ext = file.name.split('.').pop()
       const path = `dishes/${form.id || Date.now()}.${ext}`
-      const { error: upErr } = await supabase.storage.from('menu-images').upload(path, file, { upsert: true })
-      if (upErr) { setImageError(upErr.message); setImageUploading(false); return }
-      const { data } = supabase.storage.from('menu-images').getPublicUrl(path)
-      set('image_url', data.publicUrl)
+      const fd = new FormData()
+      fd.append('file', file)
+      fd.append('path', path)
+      const res = await fetch('/api/upload', { method: 'POST', body: fd })
+      const json = await res.json()
+      if (!res.ok) { setImageError(json.error ?? 'Upload failed'); setImageUploading(false); return }
+      set('image_url', json.url)
     } catch (e: unknown) {
       setImageError(e instanceof Error ? e.message : 'Upload failed')
     }
