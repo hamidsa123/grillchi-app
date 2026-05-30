@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { PROMOS, DISHES } from '@/lib/data/static'
 import type { Promo } from '@/types/menu.types'
 import { createClient } from '@/lib/supabase/client'
@@ -26,6 +26,13 @@ export default function PromosPage() {
   const [saving, setSaving]   = useState(false)
   const [error, setError]     = useState('')
 
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.from('promos').select('*').order('sort_order')
+      .then(({ data }) => { if (data?.length) setPromos(data as Promo[]) })
+      .catch(() => {})
+  }, [])
+
   const startEdit = (p: Promo) => { setEditing(p.id); setDraft({ ...p }); setError('') }
   const cancelEdit = () => { setEditing(null); setDraft(null) }
   const setField = (k: keyof Promo, v: unknown) => setDraft(d => d ? { ...d, [k]: v } : d)
@@ -33,17 +40,25 @@ export default function PromosPage() {
   const saveEdit = async () => {
     if (!draft) return
     setSaving(true); setError('')
-    const supabase = createClient()
-    const { error: err } = await supabase.from('promos').update(draft).eq('id', draft.id)
-    if (err) { setError(err.message); setSaving(false); return }
-    setPromos(ps => ps.map(p => p.id === draft.id ? draft : p))
-    setEditing(null); setDraft(null); setSaving(false)
+    try {
+      const supabase = createClient()
+      const { error: err } = await supabase.from('promos').upsert(draft, { onConflict: 'id' })
+      if (err) { setError(err.message); setSaving(false); return }
+      setPromos(ps => ps.map(p => p.id === draft.id ? draft : p))
+      setEditing(null); setDraft(null); setSaving(false)
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Unknown error')
+      setSaving(false)
+    }
   }
 
   const toggleActive = async (p: Promo) => {
-    const supabase = createClient()
-    await supabase.from('promos').update({ active: !p.active }).eq('id', p.id)
-    setPromos(ps => ps.map(pr => pr.id === p.id ? { ...pr, active: !pr.active } : pr))
+    try {
+      const supabase = createClient()
+      const updated = { ...p, active: !p.active }
+      await supabase.from('promos').upsert(updated, { onConflict: 'id' })
+      setPromos(ps => ps.map(pr => pr.id === p.id ? updated : pr))
+    } catch {}
   }
 
   return (

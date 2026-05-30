@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { BRANCHES } from '@/lib/data/static'
 import type { Branch } from '@/types/menu.types'
 import { createClient } from '@/lib/supabase/client'
@@ -24,6 +24,13 @@ export default function BranchesPage() {
   const [saving, setSaving]   = useState(false)
   const [error, setError]     = useState('')
 
+  useEffect(() => {
+    const supabase = createClient()
+    supabase.from('branches').select('*').order('sort_order')
+      .then(({ data }) => { if (data?.length) setBranches(data as Branch[]) })
+      .catch(() => {})
+  }, [])
+
   const startEdit = (b: Branch) => { setEditing(b.id); setDraft({ ...b }); setError('') }
   const cancelEdit = () => { setEditing(null); setDraft(null) }
   const setField = (k: keyof Branch, v: unknown) => setDraft(d => d ? { ...d, [k]: v } : d)
@@ -31,17 +38,25 @@ export default function BranchesPage() {
   const saveEdit = async () => {
     if (!draft) return
     setSaving(true); setError('')
-    const supabase = createClient()
-    const { error: err } = await supabase.from('branches').update(draft).eq('id', draft.id)
-    if (err) { setError(err.message); setSaving(false); return }
-    setBranches(bs => bs.map(b => b.id === draft.id ? draft : b))
-    setEditing(null); setDraft(null); setSaving(false)
+    try {
+      const supabase = createClient()
+      const { error: err } = await supabase.from('branches').upsert(draft, { onConflict: 'id' })
+      if (err) { setError(err.message); setSaving(false); return }
+      setBranches(bs => bs.map(b => b.id === draft.id ? draft : b))
+      setEditing(null); setDraft(null); setSaving(false)
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Unknown error')
+      setSaving(false)
+    }
   }
 
   const toggleOpen = async (b: Branch) => {
-    const supabase = createClient()
-    await supabase.from('branches').update({ open: !b.open }).eq('id', b.id)
-    setBranches(bs => bs.map(br => br.id === b.id ? { ...br, open: !br.open } : br))
+    try {
+      const supabase = createClient()
+      const updated = { ...b, open: !b.open }
+      await supabase.from('branches').upsert(updated, { onConflict: 'id' })
+      setBranches(bs => bs.map(br => br.id === b.id ? updated : br))
+    } catch {}
   }
 
   return (

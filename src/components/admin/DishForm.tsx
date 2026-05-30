@@ -59,6 +59,7 @@ export default function DishForm({ dish, categories }: Props) {
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [imageUploading, setImageUploading] = useState(false)
+  const [imageError, setImageError] = useState('')
 
   const [form, setForm] = useState({
     id:          dish?.id          ?? '',
@@ -84,14 +85,17 @@ export default function DishForm({ dish, categories }: Props) {
   const uploadImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
-    setImageUploading(true)
-    const supabase = createClient()
-    const ext = file.name.split('.').pop()
-    const path = `dishes/${form.id || Date.now()}.${ext}`
-    const { error: upErr } = await supabase.storage.from('menu-images').upload(path, file, { upsert: true })
-    if (!upErr) {
+    setImageUploading(true); setImageError('')
+    try {
+      const supabase = createClient()
+      const ext = file.name.split('.').pop()
+      const path = `dishes/${form.id || Date.now()}.${ext}`
+      const { error: upErr } = await supabase.storage.from('menu-images').upload(path, file, { upsert: true })
+      if (upErr) { setImageError(upErr.message); setImageUploading(false); return }
       const { data } = supabase.storage.from('menu-images').getPublicUrl(path)
       set('image_url', data.publicUrl)
+    } catch (e: unknown) {
+      setImageError(e instanceof Error ? e.message : 'Upload failed')
     }
     setImageUploading(false)
   }
@@ -106,9 +110,7 @@ export default function DishForm({ dish, categories }: Props) {
       ing_fa: form.ing_fa.split(',').map(s => s.trim()).filter(Boolean),
       ing_ar: form.ing_ar.split(',').map(s => s.trim()).filter(Boolean),
     }
-    const { error: err } = isNew
-      ? await supabase.from('dishes').insert(payload)
-      : await supabase.from('dishes').update(payload).eq('id', dish!.id)
+    const { error: err } = await supabase.from('dishes').upsert(payload, { onConflict: 'id' })
     if (err) { setError(err.message); setSaving(false) }
     // i18n router adds locale automatically — don't include /${locale} prefix
     else router.push('/admin/dishes' as '/')
@@ -196,6 +198,11 @@ export default function DishForm({ dish, categories }: Props) {
               {imageUploading ? 'Uploading…' : '+ Upload image'}
               <input type="file" accept="image/*" onChange={uploadImage} style={{ display: 'none' }} />
             </label>
+            {imageError && (
+              <div style={{ marginTop: 10, padding: 10, borderRadius: 10, background: 'rgba(201,96,63,0.1)', border: '1px solid rgba(201,96,63,0.3)', color: '#d9967a', fontSize: 12 }}>
+                {imageError}
+              </div>
+            )}
           </section>
 
           <section style={card}>
