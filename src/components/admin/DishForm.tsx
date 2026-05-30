@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import type { Dish, Category } from '@/types/menu.types'
 import { createClient } from '@/lib/supabase/client'
+import { saveDish, deleteDish } from '@/app/[locale]/admin/actions'
 import { useRouter } from '@/i18n/navigation'
 
 interface Props { dish?: Dish; categories: Category[]; locale: string }
@@ -103,35 +104,20 @@ export default function DishForm({ dish, categories }: Props) {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSaving(true); setError('')
-    try {
-      const supabase = createClient()
-
-      // Seed categories first so the foreign key constraint is always satisfied
-      const { error: catErr } = await supabase.from('categories').upsert(
-        categories.map(c => ({ id: c.id, name_en: c.name_en, name_fa: c.name_fa, name_ar: c.name_ar, icon_paths: c.icon_paths, sort_order: c.sort_order })),
-        { onConflict: 'id' }
-      )
-      if (catErr) { setError('Categories seed failed: ' + catErr.message); setSaving(false); return }
-
-      const payload = {
-        ...form,
-        ing_en: form.ing_en.split(',').map(s => s.trim()).filter(Boolean),
-        ing_fa: form.ing_fa.split(',').map(s => s.trim()).filter(Boolean),
-        ing_ar: form.ing_ar.split(',').map(s => s.trim()).filter(Boolean),
-      }
-      const { error: err } = await supabase.from('dishes').upsert(payload, { onConflict: 'id' })
-      if (err) { setError(err.message); setSaving(false); return }
-      router.push('/admin/dishes' as '/')
-    } catch (e: unknown) {
-      setError(e instanceof Error ? e.message : 'Unknown error')
-      setSaving(false)
-    }
+    const payload = {
+      ...form,
+      ing_en: form.ing_en.split(',').map(s => s.trim()).filter(Boolean),
+      ing_fa: form.ing_fa.split(',').map(s => s.trim()).filter(Boolean),
+      ing_ar: form.ing_ar.split(',').map(s => s.trim()).filter(Boolean),
+    } as Dish
+    const result = await saveDish(categories, payload)
+    if (result.error) { setError(result.error); setSaving(false); return }
+    router.push('/admin/dishes' as '/')
   }
 
   const del = async () => {
     if (!confirm('Delete this dish?')) return
-    const supabase = createClient()
-    await supabase.from('dishes').delete().eq('id', dish!.id)
+    await deleteDish(dish!.id)
     router.push('/admin/dishes' as '/')
   }
 
