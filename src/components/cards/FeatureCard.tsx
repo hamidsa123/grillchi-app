@@ -2,7 +2,7 @@
 import type { Dish, Locale } from '@/types/menu.types'
 import { dishName, dishDesc } from '@/types/menu.types'
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 import Ic from '@/components/primitives/Ic'
 import Badges from '@/components/primitives/Badges'
 import PriceDisplay from '@/components/primitives/PriceDisplay'

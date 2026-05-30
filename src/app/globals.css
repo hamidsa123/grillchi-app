@@ -25,6 +25,12 @@
 * { box-sizing: border-box; }
 html, body { margin: 0; padding: 0; }
 
+/* Remove tap highlight on mobile and ensure instant touch response */
+a, button, [role="button"] {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
 html[lang="fa"], html[lang="ar"] {
   --font-display: 'Vazirmatn', system-ui, sans-serif;
   --font-body: 'Vazirmatn', system-ui, sans-serif;
@@ -40,7 +46,7 @@ body {
 .app-bg {
   min-height: 100svh;
   position: relative;
-  overflow-x: hidden;
+  overflow-x: clip;
   color: var(--cream);
   font-family: var(--font-body);
   background:
@@ -208,13 +214,26 @@ html[lang="fa"] .price-display, html[lang="ar"] .price-display { font-family: va
 .trend-row:hover { background: var(--surface-2); }
 .trend-row:active { transform: scale(0.985); }
 
-/* Trend row RTL arrow flip */
+/* RTL icon flip — applies to directional arrows/chevrons */
 html[dir="rtl"] .rtl-flip { transform: scaleX(-1); }
+
+/* RTL: horizontal scroll containers start from the inline-end */
+html[dir="rtl"] .hscroll-start {
+  direction: rtl;
+}
+
+/* Admin sidebar border already uses borderInlineEnd in component */
+
+/* Ensure button text and flex rows respect writing direction */
+button { direction: inherit; }
 
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes floatY { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
-@keyframes pageIn { from { transform: translateY(16px); } to { transform: translateY(0); } }
-@keyframes sheetUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+/* Use transform:none (not translateY(0)) so fill-mode:both doesn't leave a transform
+   value behind — any non-none transform creates a containing block for position:fixed
+   descendants, which breaks BottomNav, sheets, and Toast positioning. */
+@keyframes pageIn  { from { transform: translateY(16px); } to { transform: none; } }
+@keyframes sheetUp { from { transform: translateY(100%); } to { transform: none; } }
 @keyframes toastUp { from { opacity: 0; transform: translateY(16px) scale(0.9); } to { opacity: 1; transform: none; } }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes drift { to { transform: translate(-60px,-40px) rotate(3deg); } }

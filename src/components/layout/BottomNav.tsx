@@ -34,7 +34,7 @@ export default function BottomNav({ locale, active, onBranch }: Props) {
 
   return (
     <div style={{
-      position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 45,
+      position: 'fixed', bottom: 0, insetInline: 0, zIndex: 45,
       display: 'flex', justifyContent: 'space-around', alignItems: 'center',
       padding: '12px 14px 30px',
       background: 'linear-gradient(180deg, rgba(12,28,20,0) 0%, rgba(11,24,17,0.92) 38%)',

@@ -2,7 +2,7 @@
 import type { Dish, Locale } from '@/types/menu.types'
 import { dishName } from '@/types/menu.types'
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from '@/i18n/navigation'
 
 const CHEF: Record<Locale, string> = { en: "Chef's selection", fa: 'انتخاب سرآشپز', ar: 'اختيار الشيف' }
 
