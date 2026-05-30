@@ -103,17 +103,29 @@ export default function DishForm({ dish, categories }: Props) {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSaving(true); setError('')
-    const supabase = createClient()
-    const payload = {
-      ...form,
-      ing_en: form.ing_en.split(',').map(s => s.trim()).filter(Boolean),
-      ing_fa: form.ing_fa.split(',').map(s => s.trim()).filter(Boolean),
-      ing_ar: form.ing_ar.split(',').map(s => s.trim()).filter(Boolean),
+    try {
+      const supabase = createClient()
+
+      // Seed categories first so the foreign key constraint is always satisfied
+      const { error: catErr } = await supabase.from('categories').upsert(
+        categories.map(c => ({ id: c.id, name_en: c.name_en, name_fa: c.name_fa, name_ar: c.name_ar, icon_paths: c.icon_paths, sort_order: c.sort_order })),
+        { onConflict: 'id' }
+      )
+      if (catErr) { setError('Categories seed failed: ' + catErr.message); setSaving(false); return }
+
+      const payload = {
+        ...form,
+        ing_en: form.ing_en.split(',').map(s => s.trim()).filter(Boolean),
+        ing_fa: form.ing_fa.split(',').map(s => s.trim()).filter(Boolean),
+        ing_ar: form.ing_ar.split(',').map(s => s.trim()).filter(Boolean),
+      }
+      const { error: err } = await supabase.from('dishes').upsert(payload, { onConflict: 'id' })
+      if (err) { setError(err.message); setSaving(false); return }
+      router.push('/admin/dishes' as '/')
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Unknown error')
+      setSaving(false)
     }
-    const { error: err } = await supabase.from('dishes').upsert(payload, { onConflict: 'id' })
-    if (err) { setError(err.message); setSaving(false) }
-    // i18n router adds locale automatically — don't include /${locale} prefix
-    else router.push('/admin/dishes' as '/')
   }
 
   const del = async () => {
