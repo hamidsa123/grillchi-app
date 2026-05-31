@@ -26,7 +26,7 @@ export default async function DishesPage({ params }: { params: Promise<{ locale:
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             <tr style={{ borderBottom: '1px solid var(--hairline)' }}>
-              {['Name', 'Category', 'Price (×1000 T)', 'Tags', 'Featured', 'Available', 'Actions'].map(h => (
+              {['Name', 'Category', 'Price (×1000 T)', 'Tags', 'Hero', 'Featured', 'Trending', 'Available', 'Actions'].map(h => (
                 <th key={h} style={{ padding: '14px 16px', textAlign: 'left', fontSize: 11, fontWeight: 700, color: 'var(--cream-50)', letterSpacing: '0.08em', textTransform: 'uppercase' }}>{h}</th>
               ))}
             </tr>
@@ -43,7 +43,13 @@ export default async function DishesPage({ params }: { params: Promise<{ locale:
                   </div>
                 </td>
                 <td style={{ padding: '14px 16px' }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: d.home_hero ? 'var(--sage)' : 'var(--cream-30)' }}>{d.home_hero ? '✓' : '—'}</span>
+                </td>
+                <td style={{ padding: '14px 16px' }}>
                   <span style={{ fontSize: 11, fontWeight: 700, color: d.featured ? 'var(--sage)' : 'var(--cream-30)' }}>{d.featured ? '✓' : '—'}</span>
+                </td>
+                <td style={{ padding: '14px 16px' }}>
+                  <span style={{ fontSize: 11, fontWeight: 700, color: d.trending ? 'var(--sage)' : 'var(--cream-30)' }}>{d.trending ? '✓' : '—'}</span>
                 </td>
                 <td style={{ padding: '14px 16px' }}>
                   <span style={{ fontSize: 11, fontWeight: 700, color: d.available ? 'var(--sage)' : '#d9967a' }}>{d.available ? 'Yes' : 'No'}</span>

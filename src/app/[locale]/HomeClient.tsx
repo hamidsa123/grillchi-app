@@ -36,6 +36,7 @@ const isRtlLocale = (locale: Locale) => locale !== 'en'
 
 interface Props {
   locale: Locale
+  hero: Dish[]
   featured: Dish[]
   trending: Dish[]
   categories: Category[]
@@ -44,7 +45,7 @@ interface Props {
   dishesById: Record<string, Dish>
 }
 
-export default function HomeClient({ locale, featured, trending, categories, branches, promos, dishesById }: Props) {
+export default function HomeClient({ locale, hero, featured, trending, categories, branches, promos, dishesById }: Props) {
   const router = useRouter()
   const { branchId, setBranchId, sheet, openSheet, closeSheet } = useMenuStore()
   const branch = branches.find(b => b.id === branchId) ?? branches[0]
@@ -65,7 +66,7 @@ export default function HomeClient({ locale, featured, trending, categories, bra
           </div>
 
           {/* Hero image composition */}
-          <HeroSerpentine featured={featured} locale={locale} />
+          <HeroSerpentine featured={hero} locale={locale} />
 
           {/* CTAs */}
           <div style={{ display: 'flex', gap: 12, alignItems: 'center', margin: '26px 20px 0' }}>

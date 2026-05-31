@@ -45,6 +45,7 @@ export async function saveDish(categories: Category[], payload: Dish): Promise<{
   const { error } = await supabase.from('dishes').upsert(payload, { onConflict: 'id' })
   if (error) return { error: error.message }
   revalidatePath('/[locale]/admin/(dashboard)/dishes')
+  revalidatePath('/[locale]', 'layout')
   return {}
 }
 
@@ -53,5 +54,6 @@ export async function deleteDish(id: string): Promise<{ error?: string }> {
   const { error } = await supabase.from('dishes').delete().eq('id', id)
   if (error) return { error: error.message }
   revalidatePath('/[locale]/admin/(dashboard)/dishes')
+  revalidatePath('/[locale]', 'layout')
   return {}
 }

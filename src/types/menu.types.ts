@@ -29,6 +29,7 @@ export interface Dish {
   price: number
   featured: boolean
   trending: boolean
+  home_hero?: boolean
   kcal: number | null
   mins: number | null
   hot: number

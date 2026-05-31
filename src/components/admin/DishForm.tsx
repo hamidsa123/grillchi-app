@@ -68,6 +68,7 @@ export default function DishForm({ dish, categories }: Props) {
     price:       dish?.price       ?? 0,
     featured:    dish?.featured    ?? false,
     trending:    dish?.trending    ?? false,
+    home_hero:   dish?.home_hero   ?? false,
     available:   dish?.available   ?? true,
     hot:         dish?.hot         ?? 0,
     kcal:        dish?.kcal        ?? 0,
@@ -237,12 +238,12 @@ export default function DishForm({ dish, categories }: Props) {
 
           <section style={card}>
             <h2 style={cardTitle}>Visibility</h2>
-            {(['featured', 'trending', 'available'] as const).map((key) => (
+            {(['home_hero', 'featured', 'trending', 'available'] as const).map((key) => (
               <label key={key} style={{ display: 'flex', alignItems: 'center', gap: 10, cursor: 'pointer', padding: '8px 0', borderBottom: '1px solid var(--hairline)', fontSize: 14, color: 'var(--cream-70)' }}>
                 <input type="checkbox"
                   checked={form[key] as boolean}
                   onChange={e => set(key, e.target.checked)} />
-                {{ featured: 'Featured on homepage', trending: 'Trending list', available: 'Available to order' }[key]}
+                {{ home_hero: 'Show in home hero (max 3 dishes)', featured: 'Featured dish list', trending: 'Trending list', available: 'Available to order' }[key]}
               </label>
             ))}
           </section>
