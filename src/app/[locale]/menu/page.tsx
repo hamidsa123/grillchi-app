@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import type { Locale } from '@/types/menu.types'
 import { DISHES, CATEGORIES, BRANCHES } from '@/lib/data/static'
 import type { Dish, Category, Branch } from '@/types/menu.types'
