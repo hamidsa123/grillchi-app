@@ -28,16 +28,14 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
     if (p.data?.length) promos     = p.data as Promo[]
   } catch {}
 
-  const hero       = dishes.filter(d => d.home_hero).slice(0, 3)
-  const featured   = dishes.filter(d => d.featured)
-  const trending   = dishes.filter(d => d.trending).slice(0, 5)
+  const hero     = dishes.filter(d => d.home_hero).slice(0, 3)
+  const trending = dishes.filter(d => d.trending).slice(0, 5)
   const dishesById = Object.fromEntries(dishes.map(d => [d.id, d]))
 
   return (
     <HomeClient
       locale={locale as Locale}
       hero={hero}
-      featured={featured}
       trending={trending}
       categories={categories}
       branches={branches}

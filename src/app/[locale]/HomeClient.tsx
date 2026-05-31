@@ -10,7 +10,6 @@ import Toast from '@/components/primitives/Toast'
 import CategoryBar from '@/components/home/CategoryBar'
 import HeroSerpentine from '@/components/home/HeroSerpentine'
 import PromoCarousel from '@/components/home/PromoCarousel'
-import FeatureCard from '@/components/cards/FeatureCard'
 import TrendRow from '@/components/cards/TrendRow'
 import Reveal from '@/components/primitives/Reveal'
 import Ic from '@/components/primitives/Ic'
@@ -23,8 +22,6 @@ const T = {
   ourMenu2: { en: 'Menu', fa: 'گریلچی', ar: 'القائمة' },
   heroSub:  { en: 'A pizza for every taste, a sauce for every craving.', fa: 'یک پیتزا برای هر سلیقه، یک سس برای هر هوس.', ar: 'بيتزا لكل ذوق، صوص لكل هوس.' },
   browse:   { en: 'Browse full menu', fa: 'مشاهده منوی کامل', ar: 'تصفّح القائمة' },
-  chefPicks:{ en: "Chef's selection", fa: 'انتخاب سرآشپز', ar: 'اختيار الشيف' },
-  featured: { en: 'Featured', fa: 'پیشنهاد ویژه', ar: 'مميزة' },
   trending: { en: 'Trending now', fa: 'پرطرفدارها', ar: 'الأكثر رواجاً' },
   trendSub: { en: 'What everyone is ordering today', fa: 'پرسفارش‌ترین‌های امروز', ar: 'الأكثر طلباً اليوم' },
   seeAll:   { en: 'See all', fa: 'مشاهده همه', ar: 'عرض الكل' },
@@ -36,7 +33,6 @@ const isRtlLocale = (locale: Locale) => locale !== 'en'
 interface Props {
   locale: Locale
   hero: Dish[]
-  featured: Dish[]
   trending: Dish[]
   categories: Category[]
   branches: Branch[]
@@ -44,7 +40,7 @@ interface Props {
   dishesById: Record<string, Dish>
 }
 
-export default function HomeClient({ locale, hero, featured, trending, categories, branches, promos, dishesById }: Props) {
+export default function HomeClient({ locale, hero, trending, categories, branches, promos, dishesById }: Props) {
   const router = useRouter()
   const { branchId, setBranchId, sheet, openSheet, closeSheet } = useMenuStore()
   const branch = branches.find(b => b.id === branchId) ?? branches[0]
@@ -76,24 +72,6 @@ export default function HomeClient({ locale, hero, featured, trending, categorie
 
           {/* Category bar */}
           <CategoryBar locale={locale} categories={categories} sticky={false} />
-
-          {/* Featured */}
-          {featured.length > 0 && (
-            <div style={{ marginTop: 38 }}>
-              <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', padding: '0 20px 16px' }}>
-                <div>
-                  <div className="eyebrow" style={{ marginBottom: 8 }}>{t(T.chefPicks, locale)}</div>
-                  <div className="section-title">{t(T.featured, locale)}</div>
-                </div>
-                <button onClick={() => router.push('/menu')} style={{ fontSize: 12.5, fontWeight: 600, color: 'var(--sage)', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 5, background: 'none', border: 'none', fontFamily: 'var(--font-body)' }}>
-                  {t(T.seeAll, locale)}<Ic name="arrow" size={14} sw={2} className={isRtlLocale(locale) ? 'rtl-flip' : undefined} />
-                </button>
-              </div>
-              <div style={{ display: 'flex', gap: 16, overflowX: 'auto', padding: '4px 20px 8px', scrollbarWidth: 'none', scrollSnapType: 'x mandatory' }}>
-                {featured.map(d => <FeatureCard key={d.id} dish={d} locale={locale} />)}
-              </div>
-            </div>
-          )}
 
           {/* Trending */}
           {trending.length > 0 && (
