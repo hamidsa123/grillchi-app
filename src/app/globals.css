@@ -214,6 +214,9 @@ html[lang="fa"] .price-display, html[lang="ar"] .price-display { font-family: va
 .trend-row:hover { background: var(--surface-2); }
 .trend-row:active { transform: scale(0.985); }
 
+/* RTL: hero em tag — Vazirmatn has no italic face, suppress faux-italic */
+html[dir="rtl"] .hero-title em { font-style: normal; }
+
 /* RTL icon flip — applies to directional arrows/chevrons */
 html[dir="rtl"] .rtl-flip { transform: scaleX(-1); }
 
