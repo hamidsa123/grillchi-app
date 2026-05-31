@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import type { Locale } from '@/types/menu.types'
 import { Bodoni_Moda, Plus_Jakarta_Sans, Vazirmatn } from 'next/font/google'
 import { getLocale } from 'next-intl/server'
+import StoreHydration from '@/components/StoreHydration'
 import './globals.css'
 
 const bodoni    = Bodoni_Moda({ subsets: ['latin'], variable: '--font-bodoni', display: 'swap', style: ['normal', 'italic'], weight: ['400', '600', '700'] })
@@ -29,14 +30,9 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
     >
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-        <style>{`
-          :root {
-            --font-display: ${locale === 'en' ? 'var(--font-bodoni), Georgia, serif' : 'var(--font-vazirmatn), system-ui, sans-serif'};
-            --font-body:    ${locale === 'en' ? 'var(--font-jakarta), system-ui, sans-serif' : 'var(--font-vazirmatn), system-ui, sans-serif'};
-          }
-        `}</style>
       </head>
       <body suppressHydrationWarning>
+        <StoreHydration />
         {children}
       </body>
     </html>

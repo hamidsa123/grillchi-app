@@ -29,6 +29,7 @@ export const useMenuStore = create<MenuStore>()(
     {
       name: 'gc_store',
       partialize: (s) => ({ branchId: s.branchId }),
+      skipHydration: true,
     }
   )
 )
