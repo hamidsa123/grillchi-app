@@ -6,18 +6,13 @@ import Image from 'next/image'
 import { Link } from '@/i18n/navigation'
 import Ic from '@/components/primitives/Ic'
 import PriceDisplay from '@/components/primitives/PriceDisplay'
-import { useMenuStore } from '@/store/useMenuStore'
 
-const MINS:  Record<Locale, string> = { en: 'min', fa: 'دقیقه', ar: 'دقيقة' }
-const KCAL:  Record<Locale, string> = { en: 'kcal', fa: 'کالری', ar: 'سعرة' }
-const ADDED: Record<Locale, string> = { en: 'Added to your order', fa: 'به سفارش اضافه شد', ar: 'أُضيف إلى طلبك' }
+const MINS: Record<Locale, string> = { en: 'min', fa: 'دقیقه', ar: 'دقيقة' }
+const KCAL: Record<Locale, string> = { en: 'kcal', fa: 'کالری', ar: 'سعرة' }
 
 interface Props { dish: Dish; rank: number; locale: Locale }
 
 export default function TrendRow({ dish, rank, locale }: Props) {
-  const showToast = useMenuStore(s => s.showToast)
-  const onAdd = (e: React.MouseEvent) => { e.preventDefault(); showToast(`${dishName(dish, locale)} · ${ADDED[locale]}`) }
-
   return (
     <Link href={`/dish/${dish.id}` as '/'} style={{ textDecoration: 'none' }}>
       <div className="trend-row">
@@ -47,11 +42,6 @@ export default function TrendRow({ dish, rank, locale }: Props) {
         </div>
         <div style={{ textAlign: 'end' }}>
           <PriceDisplay value={dish.price} locale={locale} />
-          <div style={{ marginTop: 8, display: 'flex', justifyContent: 'flex-end' }}>
-            <button className="add-btn" style={{ width: 36, height: 36 }} onClick={onAdd}>
-              <Ic name="plus" size={18} sw={2.2} />
-            </button>
-          </div>
         </div>
       </div>
     </Link>

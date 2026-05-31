@@ -1,14 +1,12 @@
 'use client'
-import { useState } from 'react'
 import type { Dish, Branch, Locale } from '@/types/menu.types'
 import { dishName, dishDesc, dishIng } from '@/types/menu.types'
-import { digits, formatPrice } from '@/lib/utils/digits'
+import { digits } from '@/lib/utils/digits'
 import Image from 'next/image'
 import Badges from '@/components/primitives/Badges'
 import Spice from '@/components/primitives/Spice'
 import Ic from '@/components/primitives/Ic'
 import Toast from '@/components/primitives/Toast'
-import { useMenuStore } from '@/store/useMenuStore'
 import { useRouter } from '@/i18n/navigation'
 
 const T = {
@@ -17,27 +15,18 @@ const T = {
   prep:       { en: 'Prep time', fa: 'زمان آماده‌سازی', ar: 'وقت التحضير' },
   spiceLvl:   { en: 'Spice', fa: 'تندی', ar: 'الحرارة' },
   ingredients:{ en: 'Ingredients', fa: 'مواد تشکیل‌دهنده', ar: 'المكوّنات' },
-  addToOrder: { en: 'Add to order', fa: 'افزودن به سفارش', ar: 'أضف للطلب' },
-  added:      { en: 'Added to your order', fa: 'به سفارش اضافه شد', ar: 'أُضيف إلى طلبك' },
-  curr:       { en: 'Toman', fa: 'تومان', ar: 'تومان' },
   mins:       { en: 'min', fa: 'دقیقه', ar: 'دقيقة' },
 }
 const t = (obj: Record<Locale, string>, locale: Locale) => obj[locale]
 
 interface Props { dish: Dish; locale: Locale; branches: Branch[] }
 
-export default function DishClient({ dish, locale, branches }: Props) {
-  const [qty, setQty] = useState(1)
+export default function DishClient({ dish, locale, branches: _ }: Props) {
   const router = useRouter()
-  const showToast = useMenuStore(s => s.showToast)
   const isRtl = locale !== 'en'
 
-  const onAdd = () => {
-    showToast(`${digits(qty, locale)}× ${dishName(dish, locale)} · ${t(T.added, locale)}`)
-  }
-
   return (
-    <div className="app-bg" style={{ minHeight: '100svh', paddingBottom: 110 }}>
+    <div className="app-bg" style={{ minHeight: '100svh', paddingBottom: 40 }}>
       <div className="screen-enter">
         {/* Hero image */}
         <div style={{ position: 'relative', height: 460 }}>
@@ -49,7 +38,7 @@ export default function DishClient({ dish, locale, branches }: Props) {
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(10,22,15,0.45) 0%, rgba(10,22,15,0) 28%, rgba(12,28,20,0) 55%, rgba(11,24,17,0.96) 100%)', pointerEvents: 'none' }} />
         </div>
 
-        {/* Floating top bar with back & heart */}
+        {/* Floating top bar */}
         <div style={{ position: 'absolute', top: 0, insetInline: 0, zIndex: 10, display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '54px 20px 0', pointerEvents: 'none' }}>
           <button style={{ width: 42, height: 42, borderRadius: '50%', background: 'var(--surface)', border: '1px solid var(--hairline)', color: 'var(--cream)', display: 'grid', placeItems: 'center', cursor: 'pointer', pointerEvents: 'auto', backdropFilter: 'blur(8px)' }} onClick={() => router.back()}>
             <Ic name="back" size={20} sw={2.2} className={isRtl ? 'rtl-flip' : undefined} />
@@ -99,19 +88,6 @@ export default function DishClient({ dish, locale, branches }: Props) {
             </div>
           </div>
         </div>
-      </div>
-
-      {/* Sticky order bar — outside animated wrapper so position:fixed is never in a transform stacking context */}
-      <div style={{ position: 'fixed', bottom: 0, insetInline: 0, zIndex: 20, padding: '16px 20px calc(28px + env(safe-area-inset-bottom))', background: 'linear-gradient(180deg, rgba(12,28,20,0) 0%, rgba(11,24,17,0.96) 30%)', display: 'flex', alignItems: 'center', gap: 14 }}>
-        <div className="qty-stepper">
-          <button className="qty-btn" onClick={() => setQty(q => Math.max(1, q - 1))}><Ic name="minus" size={18} sw={2.2} /></button>
-          <span style={{ width: 30, textAlign: 'center', fontWeight: 700, fontFamily: 'var(--font-display)', fontSize: 17 }}>{digits(qty, locale)}</span>
-          <button className="qty-btn" onClick={() => setQty(q => q + 1)}><Ic name="plus" size={18} sw={2.2} /></button>
-        </div>
-        <button onClick={onAdd} style={{ flex: 1, height: 56, borderRadius: 999, border: 'none', cursor: 'pointer', background: 'var(--cream)', color: '#10231a', fontFamily: 'var(--font-body)', fontWeight: 700, fontSize: 15, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 24px', boxShadow: '0 12px 30px rgba(0,0,0,0.4)', transition: 'transform 0.2s var(--ease-spring)' }}>
-          <span>{t(T.addToOrder, locale)}</span>
-          <span style={{ color: '#1f3b2c' }}>{formatPrice(dish.price * qty, locale)} <span style={{ color: '#294a38', fontSize: 12 }}>{t(T.curr, locale)}</span></span>
-        </button>
       </div>
 
       <Toast />

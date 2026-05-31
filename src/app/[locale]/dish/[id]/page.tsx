@@ -6,7 +6,8 @@ import { notFound } from 'next/navigation'
 import DishClient from './DishClient'
 
 export default async function DishPage({ params }: { params: Promise<{ locale: string; id: string }> }) {
-  const { locale, id } = await params
+  const { locale, id: rawId } = await params
+  const id = decodeURIComponent(rawId)
 
   let dish: Dish | undefined    = DISHES.find(d => d.id === id)
   let branches: Branch[]        = BRANCHES

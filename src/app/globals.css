@@ -1,5 +1,14 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'Doran';
+  src: url('/fonts/Doran.woff2') format('woff2'),
+       url('/fonts/Doran.woff') format('woff');
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --cream-rgb: 236 229 209;
   --sage-rgb: 184 217 160;
@@ -31,7 +40,11 @@ a, button, [role="button"] {
   touch-action: manipulation;
 }
 
-html[lang="fa"], html[lang="ar"] {
+html[lang="fa"] {
+  --font-display: 'Doran', var(--font-vazirmatn), system-ui, sans-serif;
+  --font-body: 'Doran', var(--font-vazirmatn), system-ui, sans-serif;
+}
+html[lang="ar"] {
   --font-display: var(--font-vazirmatn), system-ui, sans-serif;
   --font-body: var(--font-vazirmatn), system-ui, sans-serif;
 }

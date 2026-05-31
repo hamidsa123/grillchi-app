@@ -154,7 +154,19 @@ export default function DishForm({ dish, categories }: Props) {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           <section style={card}>
             <h2 style={cardTitle}>Identity</h2>
-            <Field label="Slug ID" value={form.id} onChange={v => set('id', v)} />
+            <div>
+              <label style={labelStyle}>Slug ID</label>
+              <input
+                type="text"
+                value={form.id}
+                style={inputStyle}
+                placeholder="e.g. truffle-pizza"
+                onChange={e => set('id', e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-').replace(/-+/g, '-'))}
+              />
+              <div style={{ fontSize: 11, color: 'var(--cream-30)', marginTop: -12, marginBottom: 16 }}>
+                Only letters, numbers and hyphens. Used in the URL: /dish/slug-id
+              </div>
+            </div>
             <div>
               <label style={labelStyle}>Category</label>
               <select value={form.category_id} onChange={e => set('category_id', e.target.value)} style={inputStyle}>
