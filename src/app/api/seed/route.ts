@@ -18,7 +18,8 @@ export async function POST() {
   const { error: brErr } = await supabase.from('branches').upsert(BRANCHES, { onConflict: 'id' })
   if (brErr) return NextResponse.json({ error: 'branches: ' + brErr.message }, { status: 500 })
 
-  const { error: dishErr } = await supabase.from('dishes').upsert(DISHES, { onConflict: 'id' })
+  const dishes = DISHES.map(d => ({ ...d, home_hero: d.home_hero ?? false }))
+  const { error: dishErr } = await supabase.from('dishes').upsert(dishes, { onConflict: 'id' })
   if (dishErr) return NextResponse.json({ error: 'dishes: ' + dishErr.message }, { status: 500 })
 
   const { error: promoErr } = await supabase.from('promos').upsert(PROMOS, { onConflict: 'id' })

@@ -42,7 +42,7 @@ export async function saveDish(categories: Category[], payload: Dish): Promise<{
     { onConflict: 'id' }
   )
   if (catErr) return { error: 'Categories: ' + catErr.message }
-  const { error } = await supabase.from('dishes').upsert(payload, { onConflict: 'id' })
+  const { error } = await supabase.from('dishes').upsert({ ...payload, home_hero: payload.home_hero ?? false }, { onConflict: 'id' })
   if (error) return { error: error.message }
   revalidatePath('/[locale]/admin/(dashboard)/dishes')
   revalidatePath('/[locale]', 'layout')
