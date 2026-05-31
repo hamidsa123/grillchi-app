@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react'
 import type { Dish, Category } from '@/types/menu.types'
-import { createClient } from '@/lib/supabase/client'
 import { saveDish, deleteDish } from '@/app/[locale]/admin/actions'
 import { useRouter } from '@/i18n/navigation'
 
