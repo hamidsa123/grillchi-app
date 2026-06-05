@@ -1,14 +1,14 @@
+export const dynamic = 'force-dynamic'
 import { BRANCHES } from '@/lib/data/static'
 import type { Branch } from '@/types/menu.types'
-import { createClient } from '@/lib/supabase/server'
+import { query } from '@/lib/db'
 import BranchesClient from './BranchesClient'
 
 export default async function BranchesPage() {
   let branches: Branch[] = BRANCHES
   try {
-    const supabase = await createClient()
-    const { data } = await supabase.from('branches').select('*').order('sort_order')
-    if (data?.length) branches = data as Branch[]
+    const rows = await query<Branch>('SELECT * FROM branches ORDER BY sort_order')
+    if (rows.length) branches = rows
   } catch {}
 
   return <BranchesClient initialBranches={branches} />

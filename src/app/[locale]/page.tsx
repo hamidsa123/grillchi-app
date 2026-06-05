@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 import type { Locale } from '@/types/menu.types'
 import { DISHES, CATEGORIES, BRANCHES, PROMOS } from '@/lib/data/static'
 import type { Dish, Category, Branch, Promo } from '@/types/menu.types'
-import { createClient } from '@/lib/supabase/server'
+import { query } from '@/lib/db'
 import HomeClient from './HomeClient'
 
 export default async function HomePage({ params }: { params: Promise<{ locale: string }> }) {
@@ -15,17 +15,16 @@ export default async function HomePage({ params }: { params: Promise<{ locale: s
   let promos: Promo[]        = PROMOS
 
   try {
-    const supabase = await createClient()
     const [d, c, b, p] = await Promise.all([
-      supabase.from('dishes').select('*').eq('available', true).order('sort_order'),
-      supabase.from('categories').select('*').order('sort_order'),
-      supabase.from('branches').select('*').order('sort_order'),
-      supabase.from('promos').select('*').eq('active', true).order('sort_order'),
+      query<Dish>('SELECT * FROM dishes WHERE available = true ORDER BY sort_order'),
+      query<Category>('SELECT * FROM categories ORDER BY sort_order'),
+      query<Branch>('SELECT * FROM branches ORDER BY sort_order'),
+      query<Promo>('SELECT * FROM promos WHERE active = true ORDER BY sort_order'),
     ])
-    if (d.data?.length) dishes     = d.data as Dish[]
-    if (c.data?.length) categories = c.data as Category[]
-    if (b.data?.length) branches   = b.data as Branch[]
-    if (p.data?.length) promos     = p.data as Promo[]
+    if (d.length) dishes     = d
+    if (c.length) categories = c
+    if (b.length) branches   = b
+    if (p.length) promos     = p
   } catch {}
 
   const hero     = dishes.filter(d => d.home_hero).slice(0, 3)

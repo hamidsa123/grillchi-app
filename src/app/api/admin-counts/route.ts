@@ -1,25 +1,29 @@
-import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
+import { queryOne } from '@/lib/db'
 
 export async function GET() {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY
-  if (!url || !key) return NextResponse.json({ counts: { dishes: 0, categories: 0, branches: 0, openBranches: 0 } })
-
-  const supabase = createClient(url, key)
-  const [d, c, b, ob] = await Promise.all([
-    supabase.from('dishes').select('id', { count: 'exact', head: true }),
-    supabase.from('categories').select('id', { count: 'exact', head: true }),
-    supabase.from('branches').select('id', { count: 'exact', head: true }),
-    supabase.from('branches').select('id', { count: 'exact', head: true }).eq('open', true),
-  ])
-
-  return NextResponse.json({
-    counts: {
-      dishes:       d.count ?? 0,
-      categories:   c.count ?? 0,
-      branches:     b.count ?? 0,
-      openBranches: ob.count ?? 0,
-    }
-  })
+  try {
+    const row = await queryOne<{
+      dishes: number
+      categories: number
+      branches: number
+      open_branches: number
+    }>(
+      `SELECT
+         (SELECT COUNT(*)::int FROM dishes)            AS dishes,
+         (SELECT COUNT(*)::int FROM categories)        AS categories,
+         (SELECT COUNT(*)::int FROM branches)          AS branches,
+         (SELECT COUNT(*)::int FROM branches WHERE open = true) AS open_branches`,
+    )
+    return NextResponse.json({
+      counts: {
+        dishes:       row?.dishes       ?? 0,
+        categories:   row?.categories   ?? 0,
+        branches:     row?.branches     ?? 0,
+        openBranches: row?.open_branches ?? 0,
+      },
+    })
+  } catch {
+    return NextResponse.json({ counts: { dishes: 0, categories: 0, branches: 0, openBranches: 0 } })
+  }
 }

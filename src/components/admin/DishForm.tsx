@@ -105,9 +105,18 @@ export default function DishForm({ dish, categories }: Props) {
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setSaving(true); setError('')
+    setError('')
+    const id = form.id.trim()
+    if (!id) { setError('Slug ID is required'); return }
+    if (!/^[a-z0-9-]+$/.test(id)) { setError('Slug ID must be lowercase letters, digits, or dashes'); return }
+    if (!form.category_id) { setError('Category is required'); return }
+    if (!form.name_en.trim() || !form.name_fa.trim() || !form.name_ar.trim()) {
+      setError('All three names (EN/FA/AR) are required'); return
+    }
+    setSaving(true)
     const payload = {
       ...form,
+      id,
       ing_en: form.ing_en.split(',').map(s => s.trim()).filter(Boolean),
       ing_fa: form.ing_fa.split(',').map(s => s.trim()).filter(Boolean),
       ing_ar: form.ing_ar.split(',').map(s => s.trim()).filter(Boolean),

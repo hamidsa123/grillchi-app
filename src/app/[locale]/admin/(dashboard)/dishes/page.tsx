@@ -1,4 +1,5 @@
-import { createClient } from '@/lib/supabase/server'
+export const dynamic = 'force-dynamic'
+import { query } from '@/lib/db'
 import { DISHES } from '@/lib/data/static'
 import Link from 'next/link'
 import type { Dish } from '@/types/menu.types'
@@ -8,9 +9,8 @@ export default async function DishesPage({ params }: { params: Promise<{ locale:
 
   let dishes: Dish[] = DISHES
   try {
-    const supabase = await createClient()
-    const { data } = await supabase.from('dishes').select('*').order('sort_order')
-    if (data?.length) dishes = data as Dish[]
+    const rows = await query<Dish>('SELECT * FROM dishes ORDER BY sort_order')
+    if (rows.length) dishes = rows
   } catch {}
 
   return (

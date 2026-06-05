@@ -1,14 +1,14 @@
+export const dynamic = 'force-dynamic'
 import { PROMOS } from '@/lib/data/static'
 import type { Promo } from '@/types/menu.types'
-import { createClient } from '@/lib/supabase/server'
+import { query } from '@/lib/db'
 import PromosClient from './PromosClient'
 
 export default async function PromosPage() {
   let promos: Promo[] = PROMOS
   try {
-    const supabase = await createClient()
-    const { data } = await supabase.from('promos').select('*').order('sort_order')
-    if (data?.length) promos = data as Promo[]
+    const rows = await query<Promo>('SELECT * FROM promos ORDER BY sort_order')
+    if (rows.length) promos = rows
   } catch {}
 
   return <PromosClient initialPromos={promos} />

@@ -1,5 +1,6 @@
+export const dynamic = 'force-dynamic'
 import { CATEGORIES } from '@/lib/data/static'
-import { createClient } from '@/lib/supabase/server'
+import { query } from '@/lib/db'
 import type { Category } from '@/types/menu.types'
 import DishForm from '@/components/admin/DishForm'
 
@@ -8,9 +9,8 @@ export default async function NewDishPage({ params }: { params: Promise<{ locale
 
   let categories: Category[] = CATEGORIES
   try {
-    const supabase = await createClient()
-    const { data } = await supabase.from('categories').select('*').order('sort_order')
-    if (data?.length) categories = data as Category[]
+    const rows = await query<Category>('SELECT * FROM categories ORDER BY sort_order')
+    if (rows.length) categories = rows
   } catch {}
 
   return <DishForm categories={categories} locale={locale} />

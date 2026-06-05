@@ -1,5 +1,6 @@
+export const dynamic = 'force-dynamic'
 import { CATEGORIES } from '@/lib/data/static'
-import { createClient } from '@/lib/supabase/server'
+import { query, queryOne } from '@/lib/db'
 import { notFound } from 'next/navigation'
 import DishForm from '@/components/admin/DishForm'
 import type { Dish, Category } from '@/types/menu.types'
@@ -11,13 +12,12 @@ export default async function EditDishPage({ params }: { params: Promise<{ local
   let dish: Dish | undefined
 
   try {
-    const supabase = await createClient()
-    const [dishRes, catRes] = await Promise.all([
-      supabase.from('dishes').select('*').eq('id', id).single(),
-      supabase.from('categories').select('*').order('sort_order'),
+    const [dishRow, catRows] = await Promise.all([
+      queryOne<Dish>('SELECT * FROM dishes WHERE id = $1', [id]),
+      query<Category>('SELECT * FROM categories ORDER BY sort_order'),
     ])
-    if (dishRes.data) dish = dishRes.data as Dish
-    if (catRes.data?.length) categories = catRes.data as Category[]
+    if (dishRow) dish = dishRow
+    if (catRows.length) categories = catRows
   } catch {}
 
   if (!dish) notFound()

@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic'
 import type { Locale } from '@/types/menu.types'
 import { DISHES, CATEGORIES, BRANCHES } from '@/lib/data/static'
 import type { Dish, Category, Branch } from '@/types/menu.types'
-import { createClient } from '@/lib/supabase/server'
+import { query } from '@/lib/db'
 import { notFound } from 'next/navigation'
 import MenuClient from '../MenuClient'
 
@@ -15,15 +15,14 @@ export default async function CategoryPage({ params }: { params: Promise<{ local
   let branches: Branch[]     = BRANCHES
 
   try {
-    const supabase = await createClient()
     const [d, c, b] = await Promise.all([
-      supabase.from('dishes').select('*').eq('available', true).order('sort_order'),
-      supabase.from('categories').select('*').order('sort_order'),
-      supabase.from('branches').select('*').order('sort_order'),
+      query<Dish>('SELECT * FROM dishes WHERE available = true ORDER BY sort_order'),
+      query<Category>('SELECT * FROM categories ORDER BY sort_order'),
+      query<Branch>('SELECT * FROM branches ORDER BY sort_order'),
     ])
-    if (d.data?.length) dishes     = d.data as Dish[]
-    if (c.data?.length) categories = c.data as Category[]
-    if (b.data?.length) branches   = b.data as Branch[]
+    if (d.length) dishes     = d
+    if (c.length) categories = c
+    if (b.length) branches   = b
   } catch {}
 
   const cat = categories.find(c => c.id === category)

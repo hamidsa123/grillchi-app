@@ -2,7 +2,6 @@
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
 import Ic from '@/components/primitives/Ic'
-import { createClient } from '@/lib/supabase/client'
 import { useRouter } from '@/i18n/navigation'
 
 const NAV = [
@@ -18,8 +17,7 @@ export default function AdminShell({ children, locale }: { children: React.React
   const router = useRouter()
 
   const logout = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
+    await fetch('/api/auth/logout', { method: 'POST' })
     router.push('/admin/login' as '/')
   }
 
